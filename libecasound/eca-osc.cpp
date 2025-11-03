@@ -132,19 +132,19 @@ ECA_OSC_INTERFACE::~ECA_OSC_INTERFACE(void)
 
 void ECA_OSC_INTERFACE::start(void)
 {
-  const char* port_str = 0;
+  std::string port_str;
   if (udp_port_rep > 0) {
-    port_str = kvu_numtostr(udp_port_rep).c_str();
+    port_str = kvu_numtostr(udp_port_rep);
   }
 
   /* FIXME: move to after opening and acquire port
    *        with lo_server_thread_get_port */
   ECA_LOG_MSG(ECA_LOGGER::info,
 	      "started OSC interface at UDP port "
-	      + kvu_numtostr(udp_port_rep));
+	      + port_str);
 
   lo_thr_repp =
-    lo_server_thread_new(port_str, cb_lo_err_handler);
+    lo_server_thread_new(port_str.c_str(), cb_lo_err_handler);
   if (lo_thr_repp) {
 
     /* note: in liblo 0.23 function returns voide, but 
